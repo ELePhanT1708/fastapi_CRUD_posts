@@ -1,4 +1,4 @@
-# Social newtwork only with posts
+# Social network only with posts
 
 CRUD for users with posts , opportunity to like another posts on FastAPI framework
 
