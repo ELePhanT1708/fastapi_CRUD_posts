@@ -1,7 +1,6 @@
+from enum import Enum
+
 from pydantic import BaseModel
-
-
-from sqlalchemy import Enum
 
 
 class ActionType(str, Enum):
@@ -10,8 +9,6 @@ class ActionType(str, Enum):
 
 
 class BaseAction(BaseModel):
-    user_id: int
-    post_id: int
     action_type: ActionType
 
 
@@ -25,6 +22,8 @@ class ActionUpdate(BaseAction):
 
 class Action(BaseAction):
     id: int
+    user_id: int
+    post_id: int
 
     class Config:
         orm_mode = True

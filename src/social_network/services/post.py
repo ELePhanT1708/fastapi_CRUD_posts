@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from social_network import tables
 from social_network.db import get_session
+from social_network.models.action import ActionType
 from social_network.models.post  import Post, PostCreate, PostUpdate
 
 
@@ -26,6 +27,14 @@ class PostsService:
         posts = self.session.query(tables.Post).filter_by(author_id=user_id).all()
 
         return posts
+
+    def get_likes(self, post_id: int) -> List[tables.Action]:
+        likes = self.session.query(tables.Action).filter_by(post_id=post_id, action_type=ActionType.LIKE).all()
+        return likes
+
+    def get_dislikes(self, post_id: int) -> List[tables.Action]:
+        dislikes = self.session.query(tables.Action).filter_by(post_id=post_id, action_type=ActionType.DISLIKE).all()
+        return dislikes
 
     def create(self, user_id: int, post_data: PostCreate) -> tables.Post:
         post = tables.Post(**post_data.dict(), author_id=user_id)

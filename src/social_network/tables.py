@@ -1,3 +1,5 @@
+import enum
+
 import sqlalchemy as sa
 from sqlalchemy import Enum
 from sqlalchemy.ext.declarative import declarative_base
@@ -28,6 +30,7 @@ class User(Base):
 
 class Post(Base):
     __tablename__ = 'posts'
+
     id = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
     name = sa.Column(sa.String)
     body = sa.Column(sa.TEXT)
@@ -37,8 +40,14 @@ class Post(Base):
     actions = relationship("Action", back_populates="post")
 
 
+class ActionType(Enum):
+    DISLIKE = 'Dislike'
+    LIKE = 'Like'
+
+
 class Action(Base):
     __tablename__ = 'actions'
+
     id = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
     action_type = sa.Column(sa.String)
     user_id = sa.Column(sa.Integer, sa.ForeignKey("users.id"))
