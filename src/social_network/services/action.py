@@ -37,8 +37,8 @@ class ActionsService:
             return action
         raise HTTPException(status_code=405, detail="Can't like your posts !")
 
-    def delete(self, user_id: int, post_id: int) -> None:
-        post = self._get(user_id, post_id)
-        self.session.delete(post)
-        self.session.commit()
-        return Response(status_code=status.HTTP_204_NO_CONTENT)
+    # def delete(self, user_id: int, post_id: int) -> None:
+    #     post = self._get(user_id, post_id)
+    #     self.session.delete(post)
+    #     self.session.commit()
+    #     return Response(status_code=status.HTTP_204_NO_CONTENT)
