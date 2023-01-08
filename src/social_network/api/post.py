@@ -3,7 +3,8 @@ from typing import List
 from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 
-from social_network.models.action import Action
+from social_network.models.dislikes import Dislike
+from social_network.models.likes import Like
 from social_network.models.user import (
     Token, User
 )
@@ -66,13 +67,13 @@ def delete_operation(post_id: int,
     return service.delete(user_id=user.id, post_id=post_id)
 
 
-@router.get('/likes/{post_id}', response_model=List[Action])
+@router.get('/likes/{post_id}', response_model=List[Like])
 def get_likes(post_id: int,
               service: PostsService = Depends()):
     return service.get_likes(post_id=post_id)
 
 
-@router.get('/dislikes/{post_id}', response_model=List[Action])
+@router.get('/dislikes/{post_id}', response_model=List[Dislike])
 def get_dislikes(post_id: int,
                  service: PostsService = Depends()):
     return service.get_dislikes(post_id=post_id)

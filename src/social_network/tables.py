@@ -21,8 +21,13 @@ class User(Base):
         back_populates="author",
         cascade="all, delete-orphan",
     )
-    actions = relationship(
-        "Action",
+    likes = relationship(
+        "Likes",
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
+    dislikes = relationship(
+        "Dislikes",
         back_populates="user",
         cascade="all, delete-orphan",
     )
@@ -37,21 +42,27 @@ class Post(Base):
     author_id = sa.Column(sa.Integer, sa.ForeignKey("users.id"))
 
     author = relationship("User", back_populates="posts")
-    actions = relationship("Action", back_populates="post")
+    likes = relationship("Likes", back_populates="post", lazy='dynamic', uselist=True)
+    dislikes = relationship("Dislikes", back_populates="post", lazy='dynamic', uselist=True)
 
 
-class ActionType(Enum):
-    DISLIKE = 'Dislike'
-    LIKE = 'Like'
-
-
-class Action(Base):
-    __tablename__ = 'actions'
+class Likes(Base):
+    __tablename__ = 'likes'
 
     id = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
-    action_type = sa.Column(sa.String)
     user_id = sa.Column(sa.Integer, sa.ForeignKey("users.id"))
     post_id = sa.Column(sa.Integer, sa.ForeignKey("posts.id"))
 
-    user = relationship("User", back_populates="actions")
-    post = relationship("Post", back_populates="actions")
+    user = relationship("User", back_populates="likes")
+    post = relationship("Post", back_populates="likes", lazy='dynamic', uselist=True)
+
+
+class Dislikes(Base):
+    __tablename__ = 'dislikes'
+
+    id = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
+    user_id = sa.Column(sa.Integer, sa.ForeignKey("users.id"))
+    post_id = sa.Column(sa.Integer, sa.ForeignKey("posts.id"))
+
+    user = relationship("User", back_populates="dislikes")
+    post = relationship("Post", back_populates="dislikes", lazy='dynamic', uselist=True)
