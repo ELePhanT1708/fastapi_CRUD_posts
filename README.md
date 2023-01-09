@@ -6,13 +6,13 @@ For launching app :
 
 -- clone rep
 
--- create venev in directory with project:
+-- create venv in directory with project:
 
       python -m venv venv
       
 -- activate venv:
 
-      venv/Scripts/acrivate.ps1
+      venv/Scripts/activate.ps1
       
 -- install requirements.txt:
 
@@ -24,7 +24,7 @@ For launching app :
 
     - select src/social_network/__main__.py as script 
     
-    - add environment variables :     
+      - add environment variables :     
     
         PYTHONUNBUFFERED=1;
         DATABASE_URL=sqlite:///database.sqlite3;
