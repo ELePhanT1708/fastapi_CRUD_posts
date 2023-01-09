@@ -6,6 +6,7 @@ from fastapi import HTTPException, status, Depends
 from pydantic import ValidationError
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer
+from starlette.authentication import AuthenticationBackend, AuthenticationError
 
 from .. import tables
 from ..db import get_session

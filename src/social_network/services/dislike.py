@@ -14,8 +14,8 @@ class DislikesService:
 
     def _get(self, user_id: int, post_id: int) -> tables.Dislikes:
         dislike = self.session.query(tables.Dislikes) \
-            .get(user_id=user_id,
-                 post_id=post_id)
+            .filter_by(user_id=user_id,
+                       post_id=post_id).first()
         if not dislike:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
         return dislike
@@ -31,6 +31,8 @@ class DislikesService:
         return dislikes
 
     def create(self, user_id: int, post_id: int) -> Optional[tables.Dislikes]:
+        if self.session.query(tables.Dislikes).filter_by(user_id=user_id, post_id=post_id).first():
+            raise HTTPException(status_code=405, detail="Can't dislike again!")
         iterable = self.session.query(tables.Post).filter_by(author_id=user_id).all()
         posts_id = [post.id for post in iterable]
         if post_id not in posts_id:

@@ -16,8 +16,8 @@ class LikesService:
 
     def _get(self, user_id: int, post_id: int) -> tables.Likes:
         likes = self.session.query(tables.Likes) \
-            .get(user_id=user_id,
-                 post_id=post_id) \
+            .filter_by(user_id=user_id,
+                       post_id=post_id) \
             .first()
         if not likes:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
@@ -34,14 +34,18 @@ class LikesService:
         return likes
 
     def create(self, user_id: int, post_id: int) -> Optional[tables.Likes]:
-        posts_id = [post.author_id for post in self.session.query(tables.Post).filter_by(author_id=user_id).all()]
-        if post_id not in posts_id:
-            like = tables.Likes(user_id=user_id,
-                                post_id=post_id)
-            self.session.add(like)
-            self.session.commit()
-            return like
-        raise HTTPException(status_code=405, detail="Can't like your posts !")
+        existing_like = self.session.query(tables.Likes).filter_by(user_id=user_id, post_id=post_id).first()
+        if existing_like:
+            raise HTTPException(status_code=405, detail="Can't like again!")
+        iterable = self.session.query(tables.Post).filter_by(author_id=user_id).all()
+        posts_id = [post.id for post in iterable]
+        if post_id in posts_id:
+            raise HTTPException(status_code=405, detail="Can't like your posts !")
+        like = tables.Likes(user_id=user_id,
+                            post_id=post_id)
+        self.session.add(like)
+        self.session.commit()
+        return like
 
     def delete(self, user_id: int, post_id: int) -> None:
         like = self._get(user_id=user_id, post_id=post_id)
