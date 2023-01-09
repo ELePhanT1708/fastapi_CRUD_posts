@@ -15,7 +15,7 @@ router = APIRouter(
 
 
 @router.post('/create/{post_id}', response_model=Like)
-def create_like(post_id: int,
+async def create_like(post_id: int,
                 user: User = Depends(get_current_user),
                 service: LikesService = Depends()
                 ):
@@ -27,7 +27,7 @@ def create_like(post_id: int,
 
 
 @router.post('/delete/{post_id}', response_model=None)
-def delete_like(post_id: int,
+async def delete_like(post_id: int,
                 user: User = Depends(get_current_user),
                 service: LikesService = Depends()
                 ):

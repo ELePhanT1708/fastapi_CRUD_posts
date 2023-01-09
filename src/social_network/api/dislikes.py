@@ -13,7 +13,7 @@ router = APIRouter(
 
 
 @router.post('/create/{post_id}', response_model=Dislike)
-def create_dislike(post_id: int,
+async def create_dislike(post_id: int,
                    user: User = Depends(get_current_user),
                    service: DislikesService = Depends()
                    ):
@@ -25,7 +25,7 @@ def create_dislike(post_id: int,
 
 
 @router.post('/delete/{post_id}', response_model=None)
-def delete_dislike(post_id: int,
+async def delete_dislike(post_id: int,
                    user: User = Depends(get_current_user),
                    service: DislikesService = Depends()
                    ):
